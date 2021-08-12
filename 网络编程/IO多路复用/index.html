@@ -1,0 +1,1058 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>IO多路复用 - SHELL & MAPLE</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#io" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SHELL &amp; MAPLE" class="md-header__button md-logo" aria-label="SHELL & MAPLE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SHELL & MAPLE
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              IO多路复用
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/Chdy/mainpage/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E9%A6%96%E9%A1%B5/" class="md-tabs__link">
+        算法笔记
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../first/" class="md-tabs__link">
+        STL源码分析
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
+        网络编程
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../libevent%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Reactor%E6%A8%A1%E5%BC%8F/" class="md-tabs__link">
+        libevent源码分析
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SHELL &amp; MAPLE" class="md-nav__button md-logo" aria-label="SHELL & MAPLE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    SHELL & MAPLE
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/Chdy/mainpage/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" data-md-state="indeterminate" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Home
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Home" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Home
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Welcome to MkDocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        page 1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/" class="md-nav__link">
+        page 2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3/" class="md-nav__link">
+        page 3
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        算法笔记
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="算法笔记" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          算法笔记
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E9%A6%96%E9%A1%B5/" class="md-nav__link">
+        主页
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E5%8D%95%E8%B0%83%E6%A0%88/" class="md-nav__link">
+        单调栈
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="md-nav__link">
+        动态规划
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        STL源码分析
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="STL源码分析" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          STL源码分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../first/" class="md-nav__link">
+        Openssl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        page 1
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        网络编程
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="网络编程" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          网络编程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          IO多路复用
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        IO多路复用
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    Select
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#poll" class="md-nav__link">
+    Poll
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#epoll" class="md-nav__link">
+    Epoll
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kqueue" class="md-nav__link">
+    Kqueue
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" data-md-state="indeterminate" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        libevent源码分析
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="libevent源码分析" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          libevent源码分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../libevent%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Reactor%E6%A8%A1%E5%BC%8F/" class="md-nav__link">
+        Reactor模式
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../libevent%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/%E6%A0%B8%E5%BF%83%E7%BB%93%E6%9E%84%E4%BD%93/" class="md-nav__link">
+        核心结构体
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#select" class="md-nav__link">
+    Select
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#poll" class="md-nav__link">
+    Poll
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#epoll" class="md-nav__link">
+    Epoll
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kqueue" class="md-nav__link">
+    Kqueue
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/Chdy/mainpage/edit/master/docs/网络编程/IO多路复用.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="io">IO多路复用<a class="headerlink" href="#io" title="Permanent link">&para;</a></h1>
+<p>IO多路复用在网络编程中是比不可少的一部分，常见的有<code>Select</code>，<code>Poll</code>，<code>Epoll</code>，<code>Kqueue</code></p>
+<h2 id="select">Select<a class="headerlink" href="#select" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code><span class="n">select</span><span class="p">(</span><span class="kt">int</span> <span class="n">nfds</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span> <span class="n">readset</span><span class="p">,</span> <span class="n">fd_set</span> <span class="o">*</span> <span class="n">writeset</span><span class="p">,</span><span class="n">fd_set</span> <span class="o">*</span> <span class="n">errorset</span><span class="p">,</span> <span class="n">timeval</span> <span class="o">*</span> <span class="n">intval</span><span class="p">)</span>
+</code></pre></div>
+&ensp;&ensp;&ensp;&ensp;select监听当前文件描述符小于nfds的fd，<code>readset</code>，<code>writeset</code>，<code>errorset</code>分别放置所关心描述符，当函数返回时，若<code>fd</code>仍在集合中，则相应<code>fd</code>有对应事件已准备，函数返回已准备好的文件描述符个数</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>readset</code>，<code>writeset</code>，<code>errorset</code>分别返回所关心描述符状态的结果，每一个位对应一个描述符，当调用完成后，若对应位为1，则表示该下标对应的描述符为准备好状态</p>
+</div>
+<p><code>intval</code>等于<code>NULL</code>时，永远等待，直到指定集合中的一个文件描述符已准备好或者捕捉到一个信号终止此进程</p>
+<p>当<code>intval</code>不为<code>NULL</code>时，等待指定的秒数和微秒数，当指定描述符中的一个文件描述符准备好时，或者超过指定时间，则立即返回</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>当<code>intval-&gt;tv_sec==0 &amp;&amp; intval-&gt;tv_usec==0</code>时，不等待，测试所有文件描述符后立即返回</p>
+</div>
+<ul>
+<li><code>FD_ZERO(fdset * fdset)</code> 将一个fdset的所有位置为0</li>
+<li><code>FD_SET(int fd, fdset * fdset)</code> 将fd加入fdset</li>
+<li><code>FD_CLR(int fd, fdset * fdset)</code> 将fd从fdset中移除</li>
+<li><code>FD_ISSET(fd, fd_set * fdset)</code> 若fd在fdset中，返回非0，否则返回0，可用于当select返回后判断fd的状态</li>
+</ul>
+<div class="admonition 缺点">
+<p class="admonition-title">缺点</p>
+<ul>
+<li><code>select</code>会修改传入的参数数组，这个对于一个需要调用很多次的函数，是非常不友好的。 </li>
+<li><code>select</code>如果任何一个sock(I/O stream)出现了数，select仅* 仅会返回，但是并不会告诉你是那个sock上有数据，所以需要用户再次遍历fdset</li>
+<li><code>select</code>只能监视1024个链接</li>
+<li><code>select</code>不是线程安全的，如果你把一个sock加入到select, 然后另外一个线程删除此fd，会导致不可预测的行为</li>
+</ul>
+</div>
+<h2 id="poll">Poll<a class="headerlink" href="#poll" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">poll</span><span class="p">(</span><span class="k">struct</span> <span class="n">pollfd</span> <span class="n">fds</span><span class="p">[],</span> <span class="kt">nfds_t</span> <span class="n">nfds</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
+</code></pre></div>
+<p>&ensp;&ensp;&ensp;&ensp;poll检查一组文件描述符，看看其中是否有为I/O做好准备，或者如果它们发生了某些事件。poll()返回I/O准备好的描述符的数目，当发生错误时返回-1。如果时间限制过期，poll()返回0</p>
+<ul>
+<li>fds是指向pollfd结构数组的指针</li>
+<li>nfds指数组元素的个数</li>
+<li>timeout为等待时间，-1时永久等待，为0时测试后立即返回，其余值时为等待timeout毫秒</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">pollfd</span> <span class="p">{</span>
+         <span class="kt">int</span>    <span class="n">fd</span><span class="p">;</span>       <span class="cm">/* file descriptor */</span>
+         <span class="kt">short</span>  <span class="n">events</span><span class="p">;</span>   <span class="cm">/* events to look for */</span>
+         <span class="kt">short</span>  <span class="n">revents</span><span class="p">;</span>  <span class="cm">/* events returned */</span>
+<span class="p">};</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>POLLERR</code>|<code>POLLHUP</code>|<code>POLLNVAL</code>这三个值即使不设置在events中，也可能出现在revents</p>
+</div>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>events标志</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POLLIN</td>
+<td>可以不阻塞的读取高优先级数据以外的数据</td>
+</tr>
+<tr>
+<td>POLLOUT</td>
+<td>可以不阻塞的写普通数据</td>
+</tr>
+<tr>
+<td>POLLERR</td>
+<td>已出错</td>
+</tr>
+<tr>
+<td>POLLHUP</td>
+<td>已挂断</td>
+</tr>
+<tr>
+<td>POLLNVAL</td>
+<td>描述符没有引用一个打开文件</td>
+</tr>
+<tr>
+<td>POLLRDNORM</td>
+<td>可以不阻塞的读取普通数据</td>
+</tr>
+<tr>
+<td>POLLRDBAND</td>
+<td>可以不阻塞的读取优先级数据，可以不阻塞的读取高优先级的数据</td>
+</tr>
+<tr>
+<td>POLLWRNORM</td>
+<td>同POLLOUT</td>
+</tr>
+<tr>
+<td>POLLWRBAND</td>
+<td>可以不阻塞的写优先级数据</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<div class="admonition 优点及缺点">
+<p class="admonition-title">优点及缺点</p>
+<ul>
+<li>poll去掉了1024个链接的限制</li>
+<li>poll不需要每次重新设置数组</li>
+<li>poll仍然不是线程安全的</li>
+</ul>
+</div>
+<h2 id="epoll">Epoll<a class="headerlink" href="#epoll" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">epoll_create</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+函数创建一个epoll句柄，参数size表明内核要监听的描述符数量。调用成功时返回一个epoll句柄描述符，失败时返回-1。
+<div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">epoll_ctl</span><span class="p">(</span><span class="kt">int</span> <span class="n">epfd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">op</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">epoll_event</span> <span class="o">*</span><span class="n">event</span><span class="p">);</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">epoll_event</span> <span class="p">{</span>
+    <span class="n">__uint32_t</span> <span class="n">events</span><span class="p">;</span> <span class="cm">/* Epoll events */</span>
+    <span class="n">epoll_data_t</span> <span class="n">data</span><span class="p">;</span> <span class="cm">/* User data variable */</span>
+<span class="p">};</span>
+</code></pre></div></p>
+<ul>
+<li>epfd 表示epoll句柄</li>
+</ul>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>op</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EPOLL_CTL_ADD</td>
+<td>注册新的fd到epfd中</td>
+</tr>
+<tr>
+<td>EPOLL_CTL_MOD</td>
+<td>修改已注册的fd的监听事件</td>
+</tr>
+<tr>
+<td>EPOLL_CTL_DEL</td>
+<td>从epfd中删除一个fd</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+<ul>
+<li>
+<p>fd 是要监听的描述符</p>
+</li>
+<li>
+<p>event 表示要监听的事件</p>
+</li>
+</ul>
+<p><div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">epoll_wait</span><span class="p">(</span><span class="kt">int</span> <span class="n">epfd</span><span class="p">,</span> <span class="k">struct</span> <span class="n">epoll_event</span> <span class="o">*</span> <span class="n">events</span><span class="p">,</span> <span class="kt">int</span> <span class="n">maxevents</span><span class="p">,</span> <span class="kt">int</span> <span class="n">timeout</span><span class="p">);</span>
+</code></pre></div>
+epoll_wait 函数等待事件的就绪，成功时返回就绪的事件数目，调用失败时返回 -1，等待超时返回 0。</p>
+<ul>
+<li><code>epfd</code> 是epoll句柄</li>
+<li><code>events</code> 表示从内核得到的就绪事件集合</li>
+<li><code>maxevents</code> 告诉内核events的大小</li>
+<li><code>timeout</code> 表示等待时间</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="k">typedef</span> <span class="k">union</span> <span class="n">epoll_data</span> <span class="p">{</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
+    <span class="n">__uint32_t</span> <span class="n">u32</span><span class="p">;</span>
+    <span class="n">__uint64_t</span> <span class="n">u64</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">epoll_data_t</span><span class="p">;</span>
+</code></pre></div>
+<div class="admonition 优点">
+<p class="admonition-title">优点</p>
+<ul>
+<li><code>epoll</code>是线程安全的。</li>
+<li><code>epoll</code>不仅告诉你sock组里面数据，还会告诉你具体哪个sock有数据</li>
+<li><code>epoll</code>支持ET模式</li>
+</ul>
+</div>
+<div class="admonition 边缘触发和水平触发">
+<p class="admonition-title">边缘触发和水平触发</p>
+<ul>
+<li>
+<p>水平触发（LT）：默认工作模式，即当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序可以不立即处理该事件；下次调用epoll_wait时，会再次通知此事件</p>
+</li>
+<li>
+<p>边缘触发（ET）： 当epoll_wait检测到某描述符事件就绪并通知应用程序时，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait时，不会再次通知此事件。（直到你做了某些操作导致该描述符变成未就绪状态了，也就是说边缘触发只在状态由未就绪变为就绪时只通知一次）</p>
+</li>
+</ul>
+</div>
+<h2 id="kqueue">Kqueue<a class="headerlink" href="#kqueue" title="Permanent link">&para;</a></h2>
+<p><div class="highlight"><pre><span></span><code><span class="kt">int</span> <span class="nf">kqueue</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</code></pre></div>
+创建一个<code>kqueue</code>文件描述符</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span>
+     <span class="nf">kevent</span><span class="p">(</span><span class="kt">int</span> <span class="n">kq</span><span class="p">,</span> <span class="k">const</span> <span class="k">struct</span> <span class="n">kevent</span> <span class="o">*</span><span class="n">changelist</span><span class="p">,</span> 
+         <span class="kt">int</span> <span class="n">nchanges</span><span class="p">,</span>
+         <span class="k">struct</span> <span class="n">kevent</span> <span class="o">*</span><span class="n">eventlist</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nevents</span><span class="p">,</span>
+         <span class="k">const</span> <span class="k">struct</span> <span class="n">timespec</span> <span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div>
+<p>可用于向kq中添加或删除新的kevent
+可用于等待IO事件的发生，返回值为已准备好IO事件的个数，代表着eventlist的前n个元素</p>
+<ul>
+<li><code>kq</code> 是kqueue文件描述符</li>
+<li><code>changelist</code> 是一个struct event数组，包含所有要更改kevent</li>
+<li><code>nchanges</code> 表示changelist的长度</li>
+<li><code>eventlist</code> 是一个struct event数组，用于接收事件已准备好的kevent</li>
+<li><code>nevents</code> eventlist的大小</li>
+<li><code>timeout</code> 等待的超时时间</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>changelist</code>通常不与<code>eventlist</code>同时使用</p>
+<p>添加event时通常使用
+<div class="highlight"><pre><span></span><code><span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kev</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">EVFILT_READ</span><span class="p">,</span> <span class="n">EV_ADD</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">kev</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</code></pre></div></p>
+<p>等待时通常使用
+<div class="highlight"><pre><span></span><code><span class="n">kevent</span><span class="p">(</span><span class="n">kq</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">eventlist</span><span class="p">,</span> <span class="n">nevents</span><span class="p">,</span>
+                    <span class="o">&amp;</span><span class="n">timeout</span><span class="p">)</span>
+</code></pre></div></p>
+</div>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">kevent</span> <span class="p">{</span>
+             <span class="kt">uintptr_t</span>       <span class="n">ident</span><span class="p">;</span>          <span class="cm">/* identifier for this event */</span>
+             <span class="kt">int16_t</span>         <span class="n">filter</span><span class="p">;</span>         <span class="cm">/* filter for event */</span>
+             <span class="kt">uint16_t</span>        <span class="n">flags</span><span class="p">;</span>          <span class="cm">/* general flags */</span>
+             <span class="kt">uint32_t</span>        <span class="n">fflags</span><span class="p">;</span>         <span class="cm">/* filter-specific flags */</span>
+             <span class="kt">intptr_t</span>        <span class="n">data</span><span class="p">;</span>           <span class="cm">/* filter-specific data */</span>
+             <span class="kt">void</span>            <span class="o">*</span><span class="n">udata</span><span class="p">;</span>         <span class="cm">/* opaque user data identifier */</span>
+     <span class="p">};</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="n">EV_SET</span><span class="p">(</span><span class="o">&amp;</span><span class="n">kev</span><span class="p">,</span> <span class="n">ident</span><span class="p">,</span> <span class="n">filter</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">fflags</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">udata</span><span class="p">);</span>
+</code></pre></div>
+<ul>
+<li><code>kev</code>为<code>struct kevent</code></li>
+<li><code>ident</code>为<code>fd</code></li>
+<li><code>fflags</code>, <code>data</code>, <code>udata</code>通常设置为0</li>
+</ul>
+<p><center></p>
+<table>
+<thead>
+<tr>
+<th>flags</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EV_ADD</td>
+<td>添加事件到kqueue</td>
+</tr>
+<tr>
+<td>EV_DELETE</td>
+<td>从kqueue中移除事件</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>filter</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EVFILT_READ</td>
+<td>在有数据可读时返回</td>
+</tr>
+<tr>
+<td>EVFILT_READ</td>
+<td>在有数据可写时返回</td>
+</tr>
+</tbody>
+</table>
+<p></center></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../../1/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              page 1
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../../libevent%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Reactor%E6%A8%A1%E5%BC%8F/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Reactor模式
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 - 2020 Chdy
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+    
+  </body>
+</html>

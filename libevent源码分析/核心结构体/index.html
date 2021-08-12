@@ -1,0 +1,837 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+    
+    
+      
+        <title>核心结构体 - SHELL & MAPLE</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="SHELL &amp; MAPLE" class="md-header__button md-logo" aria-label="SHELL & MAPLE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SHELL & MAPLE
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              核心结构体
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="md-header__options">
+      
+    </div>
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/Chdy/mainpage/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        Home
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E9%A6%96%E9%A1%B5/" class="md-tabs__link">
+        算法笔记
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../first/" class="md-tabs__link">
+        STL源码分析
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="md-tabs__link">
+        网络编程
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Reactor%E6%A8%A1%E5%BC%8F/" class="md-tabs__link md-tabs__link--active">
+        libevent源码分析
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SHELL &amp; MAPLE" class="md-nav__button md-logo" aria-label="SHELL & MAPLE" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    SHELL & MAPLE
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/Chdy/mainpage/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" data-md-state="indeterminate" type="checkbox" id="__nav_1" checked>
+      
+      <label class="md-nav__link" for="__nav_1">
+        Home
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Home" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          Home
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Welcome to MkDocs
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        page 1
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2/" class="md-nav__link">
+        page 2
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../3/" class="md-nav__link">
+        page 3
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" data-md-state="indeterminate" type="checkbox" id="__nav_2" checked>
+      
+      <label class="md-nav__link" for="__nav_2">
+        算法笔记
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="算法笔记" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          算法笔记
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E9%A6%96%E9%A1%B5/" class="md-nav__link">
+        主页
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E5%8D%95%E8%B0%83%E6%A0%88/" class="md-nav__link">
+        单调栈
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" class="md-nav__link">
+        动态规划
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" data-md-state="indeterminate" type="checkbox" id="__nav_3" checked>
+      
+      <label class="md-nav__link" for="__nav_3">
+        STL源码分析
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="STL源码分析" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          STL源码分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../first/" class="md-nav__link">
+        Openssl
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1/" class="md-nav__link">
+        page 1
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" data-md-state="indeterminate" type="checkbox" id="__nav_4" checked>
+      
+      <label class="md-nav__link" for="__nav_4">
+        网络编程
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="网络编程" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          网络编程
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="md-nav__link">
+        IO多路复用
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      <label class="md-nav__link" for="__nav_5">
+        libevent源码分析
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="libevent源码分析" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          libevent源码分析
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Reactor%E6%A8%A1%E5%BC%8F/" class="md-nav__link">
+        Reactor模式
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          核心结构体
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        核心结构体
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    事件
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reactor" class="md-nav__link">
+    Reactor反应器
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    事件
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reactor" class="md-nav__link">
+    Reactor反应器
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/Chdy/mainpage/edit/master/docs/libevent源码分析/核心结构体.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="_1">核心结构体<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<h2 id="_2">事件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>一个事件主要主要包含以下信息
+* 事件对应的fd（一个事件对应一个fd）
+* fd绑定的事件处理函数，用于在对应IO就绪时调用该函数
+* 监听的类型
+* 用于插入各个队列的指针</p>
+<p>通常我们采用event_set来初始化一个ev，该函数主要完成如下操作
+ * 设置事件 ev 绑定的文件描述符或者信号，对于定时事件，设为-1 即可；
+ * 设置事件类型，比如 EV_READ|EV_PERSIST, EV_WRITE, EV_SIGNAL 等；
+ * 设置事件的回调函数以及参数 arg；
+ * 初始化其它字段，比如缺省的 event_base 和优先级；
+<div class="highlight"><pre><span></span><code><span class="kt">void</span> <span class="n">event_set</span><span class="p">(</span><span class="k">struct</span> <span class="n">event</span> <span class="o">*</span><span class="n">ev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">short</span> <span class="n">events</span><span class="p">,</span>
+      <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">callback</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">short</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">event</span> <span class="p">{</span>
+    <span class="c1">// I/O/Signal注册事件队列 链接到event_base.eventqueue</span>
+    <span class="n">TAILQ_ENTRY</span> <span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="n">ev_next</span><span class="p">;</span>
+    <span class="c1">// active队列 链接到event_base.activequeues</span>
+    <span class="n">TAILQ_ENTRY</span> <span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="n">ev_active_next</span><span class="p">;</span> <span class="c1">//active list</span>
+    <span class="c1">// 信号事件队列 链接到event_base.sig.evsigevents</span>
+    <span class="n">TAILQ_ENTRY</span> <span class="p">(</span><span class="n">event</span><span class="p">)</span> <span class="n">ev_signal_next</span><span class="p">;</span> <span class="c1">//singnal list</span>
+    <span class="c1">// 时间事件最小堆下标 存储在event_base.timeheap</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">min_heap_idx</span><span class="p">;</span>  <span class="cm">/* for managing timeouts*/</span>
+
+    <span class="c1">//该事件所属的反应堆实例</span>
+    <span class="k">struct</span> <span class="n">event_base</span><span class="o">*</span> <span class="n">ev_base</span><span class="p">;</span>
+
+    <span class="c1">//对于 I/O 事件，是绑定的文件描述符；对于 signal 事件，是绑定的信号</span>
+    <span class="kt">int</span> <span class="n">ev_fd</span><span class="p">;</span>
+    <span class="c1">//监听的类型，I/O事件： EV_WRITE和EV_READ 定时事件：EV_TIMEOUT 信号： EV_SIGNAL 辅助选项：EV_PERSIST，表明是一个永久事件</span>
+    <span class="kt">short</span> <span class="n">ev_events</span><span class="p">;</span>
+    <span class="c1">//事件就绪执行时，调用 ev_callback 的次数，通常为 1</span>
+    <span class="kt">short</span> <span class="n">ev_ncalls</span><span class="p">;</span>
+    <span class="c1">//通过该变量可以在调用过程中删除，因为</span>
+    <span class="c1">// 有些event会在回调函数中删除自己，使用</span>
+    <span class="c1">// 该变量就是为了防止这种情况，让event可以</span>
+    <span class="c1">// 正确的将自己从event_loop中删除</span>
+    <span class="kt">short</span><span class="o">*</span> <span class="n">ev_pncalls</span><span class="p">;</span>  <span class="cm">/* Allows deletes in callback */</span> <span class="cm">/* 指针，通常指向 ev_ncalls 或者为 NULL */</span>
+
+    <span class="c1">//时间事件的超时值，与min_heap_idx配合使用，用于二叉堆排序</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">ev_timeout</span><span class="p">;</span>
+    <span class="cm">/* 优先级，事件触发后根据优先级放入不同active队列event_base.activequeues[ev_pri]中，ev_pri越小优先级越高*/</span>
+    <span class="kt">int</span> <span class="n">ev_pri</span><span class="p">;</span>
+
+    <span class="c1">//event 的回调函数，被 ev_base 调用</span>
+    <span class="kt">void</span> <span class="p">(</span><span class="o">*</span><span class="n">ev_callback</span><span class="p">)(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">short</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">arg</span><span class="p">);</span> <span class="c1">//void (*ev_callback)(int fd, short events, void *arg)</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">ev_arg</span><span class="p">;</span>
+
+    <span class="c1">// 在就绪队列被回调的时候，该变量说明发生了什么事件，event result的简称</span>
+    <span class="kt">int</span> <span class="n">ev_res</span><span class="p">;</span>     <span class="cm">/* result passed to event callback */</span>
+    <span class="c1">//标志位，标志该event已经被插入哪几个链表中,为EVLIST_*的多种组合</span>
+    <span class="kt">int</span> <span class="n">ev_flags</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<h2 id="reactor">Reactor反应器<a class="headerlink" href="#reactor" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span> <span class="n">event_base</span> <span class="p">{</span>
+    <span class="c1">// 指向与操作系统相关的io多路复用模型，该变量在event_base_new赋值</span>
+    <span class="k">const</span> <span class="k">struct</span> <span class="n">eventop</span><span class="o">*</span> <span class="n">evsel</span><span class="p">;</span>
+    <span class="c1">// evbase为 evsel-&gt;init(base)的返回值，用于保存io多路复用模型的上下文</span>
+    <span class="kt">void</span><span class="o">*</span> <span class="n">evbase</span><span class="p">;</span>
+    <span class="c1">//当前注册的事件event总数</span>
+    <span class="kt">int</span> <span class="n">event_count</span><span class="p">;</span>        <span class="cm">/* counts number of total events */</span>
+    <span class="c1">//处于活动队列的事件event总数，这部分事件已经触发即将被回调</span>
+    <span class="kt">int</span> <span class="n">event_count_active</span><span class="p">;</span> <span class="cm">/* counts number of active events */</span>
+
+    <span class="kt">int</span> <span class="n">event_gotterm</span><span class="p">;</span>      <span class="cm">/* Set to terminate loop 正常退出dispatch*/</span>
+    <span class="kt">int</span> <span class="n">event_break</span><span class="p">;</span>        <span class="cm">/* Set to terminate loop immediately 马上退出dispatch*/</span>
+
+    <span class="cm">/* active event management */</span>
+    <span class="c1">//1. active list active队里，事件已经触发等待回调通知</span>
+    <span class="c1">// - 注册一个2s计时器，2s过后该event会被放到active队列等待回调</span>
+    <span class="c1">// - 注册一个socket读事件,当socket可读会将socket读事件放到active队列等待回调</span>
+    <span class="c1">//2. 指针数组的原因是要实现优先级功能</span>
+    <span class="c1">//3. 越靠前优先级越大</span>
+    <span class="cm">/*</span>
+<span class="cm">     * activequeues 是一个二级指针，libevent 支持事件优先级，因此你可以把它看作是数组</span>
+<span class="cm">     * 其中的元素 activequeues[priority]是一个链表，链表的每个节点指向一个优先级为 priority 的就绪事件 event。</span>
+<span class="cm">     */</span>
+    <span class="k">struct</span> <span class="n">event_list</span><span class="o">**</span> <span class="n">activequeues</span><span class="p">;</span>
+    <span class="c1">// activequeues中的优先级队列数</span>
+    <span class="kt">int</span> <span class="n">nactivequeues</span><span class="p">;</span>
+
+    <span class="cm">/* signal handling info */</span>
+    <span class="k">struct</span> <span class="n">evsignal_info</span> <span class="n">sig</span><span class="p">;</span> <span class="c1">//信号相关</span>
+
+    <span class="k">struct</span> <span class="n">event_list</span> <span class="n">eventqueue</span><span class="p">;</span> <span class="c1">//保存了所有的注册事件event的指针。向该队列加入或删除事件时，会额外调用I/O复用模型的add和del函数</span>
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">event_tv</span><span class="p">;</span> <span class="cm">/* 详情见event_base_loop */</span>
+
+    <span class="k">struct</span> <span class="n">min_heap</span> <span class="n">timeheap</span><span class="p">;</span> <span class="c1">//管理定时事件的小根堆</span>
+
+    <span class="k">struct</span> <span class="n">timeval</span> <span class="n">tv_cache</span><span class="p">;</span> <span class="c1">//记录时间缓存</span>
+<span class="p">};</span>
+</code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../Reactor%E6%A8%A1%E5%BC%8F/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Reactor模式
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2018 - 2020 Chdy
+          </div>
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.sections"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      
+    
+  </body>
+</html>
